@@ -1,0 +1,1454 @@
+openapi: 3.0.0
+info:
+  title: "APISaude"
+  version: "1.0.0"
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Returns user token"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example: # Sample object
+                email: example@mail.com
+                password: test#123
+      description: ""
+      operationId: "getToken"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "email"
+          in: "formdata"
+          description: "E-mail registered on the website"
+          required: true
+          type: "string"
+          supportedSubmitMethods: []
+        - name: "password"
+          in: "formdata"
+          description: "Password registered on the website"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: A data object.
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MzM5NTY1MDksImV4cCI6MTYzMzk2MDEwOSwibmJmIjoxNjMzOTU2NTA5LCJqdGkiOiJMclc1cm5lc1RnbnR1cTB4Iiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.qdNoVYNgjc9RlknrAH0aaH6aBCkSiaAYlenaELiCjJg"
+                token_type: "bearer"
+                expires_in: "259200"
+  /api/paciente:
+    get:
+      tags:
+        - "Paciente"
+      summary: "Retorna Todos os Pacientes"
+      description: ""
+      operationId: "Paciente"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  pac_codigo: "1"
+                  pac_dataNascimento: "1996-06-02"
+                  pac_nome: "Paulo Dener"
+                  pac_telefones: "81983304592"
+                  created_at: "null"
+                  updated_at: "null"
+    post:
+      tags:
+        - "Paciente"
+      summary: "Adicionar um novo Paciente"
+      description: ""
+      operationId: "AddPaciente"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "pac_nome"
+          in: "formdata"
+          description: "Nome do paciente"
+          required: true
+          type: "string"
+        - name: "pac_dataNascimento"
+          in: "formdata"
+          description: "Data de Nascimento do paciente"
+          required: true
+          type: "date"
+        - name: "pac_telefones"
+          in: "formdata"
+          description: "Telefone do Paciente"
+          required: true
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                pac_nome:
+                  type: string
+                pac_dataNascimento:
+                  type: string
+                pac_telefones:
+                  type: string
+              example: # Sample object
+                pac_nome: "Paulo Dener Gomes"
+                pac_dataNascimento: "1996-06-02"
+                pac_telefones: "81983304592"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  pac_codigo: "1"
+                  pac_nome: "Paulo Dener Gomes"
+                  pac_dataNascimento: "1996-06-02"
+                  pac_telefones: "81983304592"
+                  created_at: "2022-10-11 at 13:31:24"
+                  updated_at: "2022-10-11 at 13:31:24"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/paciente{pac_codigo}:
+    get:
+      tags:
+        - "Paciente"
+      summary: "Returna um paciente específico"
+      description: ""
+      operationId: "PacienteCodigo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "pac_codigo"
+          in: "path"
+          description: "Código do Paciente"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  pac_codigo: "1"
+                  pac_dataNascimento: "1996-06-02"
+                  pac_nome: "Paulo Dener"
+                  pac_telefones: "81983304592"
+                  created_at: "null"
+                  updated_at: "null"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    put:
+      tags:
+        - "Paciente"
+      summary: "Editar um Paciente"
+      description: ""
+      operationId: "editPaciente"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "pac_codigo"
+          in: "path"
+          description: "Código do Paciente"
+          required: true
+          type: "Integer"
+        - name: "pac_nome"
+          in: "formdata"
+          description: "Nome do Paciente"
+          required: true
+          type: "String"
+        - name: "pac_dataNascimento"
+          in: "formdata"
+          description: "Data de Nascimento do Paciente"
+          required: true
+          type: "Date"
+        - name: "pac_telefones"
+          in: "formdata"
+          description: "Telefone do Paciente"
+          required: true
+          type: "String"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+                type_interest_id:
+                  type: integer
+              example: # Sample object
+                pac_nome: "Ewellin Victtoria"
+                pac_dataNascimento: "1996-06-02"
+                pac_telefones: "81983304592"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Editado com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    delete:
+      tags:
+        - "Paciente"
+      summary: "Deletar um paciente"
+      description: ""
+      operationId: "deletePaciente"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "pac_codigo"
+          in: "path"
+          description: "Código do paciente"
+          required: true
+          type: "Integer"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removido com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+
+  /api/planoSaude:
+    get:
+      tags:
+        - "Plano de Saúde"
+      summary: "Retorna Todos os Planos"
+      description: ""
+      operationId: "Planos"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  plan_codig: 2
+                  plano_descricao: "UNIMED RECIFE"
+                  plano_telefone: "81983304592"
+                  created_at: "2022-05-06T04:12:15.000000Z"
+                  updated_at: "2022-05-06T04:12:15.000000Z"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    post:
+      tags:
+        - "Plano de Saúde"
+      summary: "Adicionar um novo Plano"
+      description: ""
+      operationId: "AddPlano"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "plano_descricao"
+          in: "formdata"
+          description: "Nome do plano"
+          required: true
+          type: "string"
+        - name: "plano_telefone"
+          in: "formdata"
+          description: "Telefone do plano"
+          required: true
+          type: "String"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                plano_descricao:
+                  type: string
+                plano_telefone:
+                  type: string
+              example: # Sample object
+                plano_descricao: "BRADESCO"
+                plano_telefone: "81983304592"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  plano_descricao: "BRASIL"
+                  plano_telefone: "81983304592"
+                  updated_at: "2022-05-08T00:46:05.000000Z"
+                  created_at: "2022-05-08T00:46:05.000000Z"
+                  plan_codig: 4
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/planoSaude{plan_codig}:
+    get:
+      tags:
+        - "Plano de Saúde"
+      summary: "Returna um plano específico"
+      description: ""
+      operationId: "PlanoCodigo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "plan_codig"
+          in: "path"
+          description: "Código do plano"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  plano_descricao: "BRASIL"
+                  plano_telefone: "81983304592"
+                  updated_at: "2022-05-08T00:46:05.000000Z"
+                  created_at: "2022-05-08T00:46:05.000000Z"
+                  plan_codig: 4
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    put:
+      tags:
+        - "Plano de Saúde"
+      summary: "Editar um Plano"
+      description: ""
+      operationId: "editPlano"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "plan_codig"
+          in: "path"
+          description: "Código do Plano"
+          required: true
+          type: "Int"
+        - name: "plano_descricao"
+          in: "formdata"
+          description: "Nome do Plano"
+          required: true
+          type: "String"
+        - name: "plano_telefone"
+          in: "formdata"
+          description: "Telefone do Plano"
+          required: true
+          type: "String"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                plano_descricao:
+                  type: string
+                plano_telefone:
+                  type: string
+              example: # Sample object
+                plano_descricao: "SUL AMERICA"
+                plano_telefone: "81983304590"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Editado com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    delete:
+      tags:
+        - "Plano de Saúde"
+      summary: "Deletar um plano"
+      description: ""
+      operationId: "deletePlano"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "plan_codig"
+          in: "path"
+          description: "Código do plano"
+          required: true
+          type: "Int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removido com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/vinculo:
+    get:
+      tags:
+        - "Vinculo Plano-Paciente"
+      summary: "Retorna Todos os vinculos"
+      description: ""
+      operationId: "Vinculo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Numero do contrato: 4
+                  Nome do Paciente: "Ewellin Victtoria"
+                  Plano de Saude: "UNIMED RECIFE"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    post:
+      tags:
+        - "Vinculo Plano-Paciente"
+      summary: "Adicionar um novo Vinculo"
+      description: ""
+      operationId: "AddVinculo"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "fk_pac_codigo"
+          in: "formdata"
+          description: "Código do Paciente"
+          required: true
+          type: "Int"
+        - name: "fk_plan_codig"
+          in: "formdata"
+          description: "Código do Plano"
+          required: true
+          type: "Int"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                fk_pac_codigo:
+                  type: Int
+                fk_plan_codig:
+                  type: Int
+              example: # Sample object
+                plano_descricao: "BRADESCO"
+                plano_telefone: "81983304592"
+      responses:
+        "201":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Numero do contrato: 4
+                  Nome do Paciente: "Ewellin Victtoria"
+                  Plano de Saude: "UNIMED RECIFE"
+        "200":
+          description: "Erro operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  message: "Paciente ou Plano não existem."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/vinculo{nr_contrato}:
+    get:
+      tags:
+        - "Vinculo Plano-Paciente"
+      summary: "Retorna um vinculo específico"
+      description: ""
+      operationId: "NrContrato"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "nr_contrato"
+          in: "path"
+          description: "Código do Vínculo"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Numero do contrato: 4
+                  Nome do Paciente: "Ewellin Victtoria"
+                  Plano de Saude: "UNIMED RECIFE"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+
+    delete:
+      tags:
+        - "Vinculo Plano-Paciente"
+      summary: "Deletar um Vínculo"
+      description: ""
+      operationId: "deleteVinculo"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "nr_contrato"
+          in: "path"
+          description: "Código do Vinculo"
+          required: true
+          type: "Int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removido com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/procedimento:
+    get:
+      tags:
+        - "Procedimento"
+      summary: "Retorna Todos os procedimentos"
+      description: ""
+      operationId: "Procedimento"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  proc_codigo: 2
+                  proc_valor: "100.00"
+                  proc_nome: "Consulta Odontologica"
+                  created_at: "2022-05-07T04:45:36.000000Z"
+                  updated_at: "2022-05-07T04:45:36.000000Z"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    post:
+      tags:
+        - "Procedimento"
+      summary: "Adicionar um novo Procedimento"
+      description: ""
+      operationId: "AddProcedimento"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "proc_nome"
+          in: "formdata"
+          description: "Nome do Procedimento"
+          required: true
+          type: "String"
+        - name: "proc_valor"
+          in: "formdata"
+          description: "Valor do Procedimento"
+          required: true
+          type: "Decimal"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                proc_nome:
+                  type: String
+                proc_valor:
+                  type: Decimal
+              example: # Sample object
+                proc_nome: "Consulta Geral"
+                proc_valor: "900.00"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  proc_nome: "Consulta Geral"
+                  proc_valor: "900.00"
+                  updated_at: "2022-05-08T23:35:33.000000Z"
+                  created_at: "2022-05-08T23:35:33.000000Z"
+                  proc_codigo: 4
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/procedimento{proc_codigo}:
+    get:
+      tags:
+        - "Procedimento"
+      summary: "Retorna um procedimento específico"
+      description: ""
+      operationId: "ProcedimentoCodigo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "proc_codigo"
+          in: "path"
+          description: "Código do procedimento"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  proc_codigo: 2
+                  proc_valor: "100.00"
+                  proc_nome: "Consulta Odontologica"
+                  created_at: "2022-05-07T04:45:36.000000Z"
+                  updated_at: "2022-05-07T04:45:36.000000Z"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    put:
+      tags:
+        - "Procedimento"
+      summary: "Editar um Procedimento"
+      description: ""
+      operationId: "editProcedimento"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "proc_codigo"
+          in: "path"
+          description: "Código do Procedimento"
+          required: true
+          type: "Int"
+        - name: "proc_nome"
+          in: "formdata"
+          description: "Nome do Procedimento"
+          required: true
+          type: "String"
+        - name: "proc_valor"
+          in: "formdata"
+          description: "Valor do Procedimento"
+          required: true
+          type: "Decimal"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                proc_nome:
+                  type: string
+                proc_valor:
+                  type: Decimal
+              example: # Sample object
+                proc_nome: "Consulta"
+                proc_valor: "100.00"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Editado com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    delete:
+      tags:
+        - "Procedimento"
+      summary: "Deletar um procedimento"
+      description: ""
+      operationId: "deleteProcedimento"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "proc_codigo"
+          in: "path"
+          description: "Código do procedimento"
+          required: true
+          type: "Int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removido com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/especialidade:
+    get:
+      tags:
+        - "Especialidade"
+      summary: "Retorna Todos as Especialidades"
+      description: ""
+      operationId: "Especialidade"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  espec_codigo: 1
+                  espec_nome: "Dentista"
+                  created_at: "2022-05-07T05:05:19.000000Z"
+                  updated_at: "2022-05-07T05:05:19.000000Z"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    post:
+      tags:
+        - "Especialidade"
+      summary: "Adicionar uma nova Especialidade"
+      description: ""
+      operationId: "AddEspecialidade"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "espec_nome"
+          in: "formdata"
+          description: "Nome da Especialidade"
+          required: true
+          type: "String"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                proc_nome:
+                  type: String
+              example: # Sample object
+                espec_nome: "Dentista"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  espec_nome: "Oftalmologista"
+                  updated_at: "2022-05-08T23:52:39.000000Z"
+                  created_at: "2022-05-08T23:52:39.000000Z"
+                  espec_codigo: 5
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/especialidade{espec_codigo}:
+    get:
+      tags:
+        - "Especialidade"
+      summary: "Retorna uma Especialidade específico"
+      description: ""
+      operationId: "EspecialidadeCodigo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "espec_codigo"
+          in: "path"
+          description: "Código da Especialidade"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  espec_nome: "Oftalmologista"
+                  updated_at: "2022-05-08T23:52:39.000000Z"
+                  created_at: "2022-05-08T23:52:39.000000Z"
+                  espec_codigo: 5
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    put:
+      tags:
+        - "Especialidade"
+      summary: "Editar uma Especialidade"
+      description: ""
+      operationId: "editEspecialidade"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "espec_codigo"
+          in: "path"
+          description: "Código da Especialidade"
+          required: true
+          type: "Int"
+        - name: "espec_nome"
+          in: "formdata"
+          description: "Nome do Procedimento"
+          required: true
+          type: "String"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                espec_nome:
+                  type: string
+              example: # Sample object
+                espec_nome: "Dentista"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Editado com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    delete:
+      tags:
+        - "Especialidade"
+      summary: "Deletar uma Especialidade"
+      description: ""
+      operationId: "deleteEspecialidade"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "espec_codigo"
+          in: "path"
+          description: "Código da Especialidade"
+          required: true
+          type: "Int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removida com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/medico:
+    get:
+      tags:
+        - "Medico"
+      summary: "Retorna Todos os Medicos"
+      description: ""
+      operationId: "Medico"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Código: 2
+                  Médico: "Paulo Dener"
+                  CRM: "115245"
+                  Especialidade: "Clinico Geral"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    post:
+      tags:
+        - "Medico"
+      summary: "Adicionar um novo Medico"
+      description: ""
+      operationId: "AddMedico"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "med_nome"
+          in: "formdata"
+          description: "Nome do Medico"
+          required: true
+          type: "String"
+        - name: "med_CRM"
+          in: "formdata"
+          description: "CRM do médico"
+          required: true
+          type: "String"
+        - name: "fk_espec_codigo"
+          in: "formdata"
+          description: "Código da Especialidade"
+          required: true
+          type: "Int"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                med_nome:
+                  type: String
+                med_CRM:
+                  type: String
+                fk_espec_codigo:
+                  type: Int
+              example: # Sample object
+                med_nome: "Tiago Xavier"
+                med_CRM: "135458"
+                fk_espec_codigo: 1
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Código: 6,
+                  Médico: "Tiago Xavier"
+                  CRM: "135458"
+                  Especialidade: "Dentista"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/medico{med_codigo}:
+    get:
+      tags:
+        - "Medico"
+      summary: "Retorna um Medico específico"
+      description: ""
+      operationId: "MedicoCodigo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "med_codigo"
+          in: "path"
+          description: "Código do Médico"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Código: 6,
+                  Médico: "Tiago Xavier"
+                  CRM: "135458"
+                  Especialidade: "Dentista"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    put:
+      tags:
+        - "Medico"
+      summary: "Editar um Medico"
+      description: ""
+      operationId: "editMedico"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "med_codigo"
+          in: "path"
+          description: "Código do Medico"
+          required: true
+          type: "Int"
+        - name: "med_nome"
+          in: "formdata"
+          description: "Nome do Médico"
+          required: true
+          type: "String"
+        - name: "med_CRM"
+          in: "formdata"
+          description: "CRM do médico"
+          required: true
+          type: "String"
+        - name: "fk_espec_codigo"
+          in: "formdata"
+          description: "Código da Especialidade"
+          required: true
+          type: "Int"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                med_nome:
+                  type: string
+                med_CRM:
+                  type: string
+                fk_espec_codigo:
+                  type: int
+              example: # Sample object
+                med_nome: "Tiago Xavier"
+                med_CRM: "135458"
+                fk_espec_codigo: 1
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Editado com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    delete:
+      tags:
+        - "Medico"
+      summary: "Deletar um Medico"
+      description: ""
+      operationId: "deleteMedico"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "med_codigo"
+          in: "path"
+          description: "Código do Medico"
+          required: true
+          type: "Int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removido com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/consulta:
+    get:
+      tags:
+        - "Consulta"
+      summary: "Retorna Todos as Consultas"
+      description: ""
+      operationId: "Consulta"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Código: 1
+                  Médico: "Paulo Dener"
+                  Paciente: "Ewellin Victtoria"
+                  Plano: "UNIMED RECIFE"
+                  Nº Contrato: 4
+                  Data: "2022-05-08"
+                  Hora: "08:00:00"
+                  Procedimento: "Consulta Odontologica"
+                  Particular: "Sim"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    post:
+      tags:
+        - "Consulta"
+      summary: "Adicionar uma nova Consulta"
+      description: ""
+      operationId: "AddConsulta"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "data"
+          in: "formdata"
+          description: "Data da consulta"
+          required: true
+          type: "Date"
+        - name: "hora"
+          in: "formdata"
+          description: "Hora da Consulta"
+          required: true
+          type: "time"
+        - name: "particular"
+          in: "formdata"
+          description: "Indica se a consulta é particular ou não"
+          required: true
+          type: "Int"
+        - name: "fk_pac_codigo"
+          in: "formdata"
+          description: "Código do Paciente"
+          required: true
+          type: "Int"
+        - name: "fk_med_codigo"
+          in: "formdata"
+          description: "Código do Médico"
+          required: true
+          type: "Int"
+        - name: "fk_nr_contrato"
+          in: "formdata"
+          description: "Código do Vinculo"
+          required: true
+          type: "Int"
+        - name: "fk_proc_codigo"
+          in: "formdata"
+          description: "Código do Procedimento"
+          required: true
+          type: "Int"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                data:
+                  type: Date
+                hora:
+                  type: Time
+                particular:
+                  type: Int
+                fk_pac_codigo:
+                  type: Int
+                fk_med_codigo:
+                  type: Int
+                fk_nr_contrato:
+                  type: Int
+                fk_proc_codigo:
+                  type: Int
+
+              example: # Sample object
+                data: "2022-05-09"
+                hora: "09:00:00"
+                particular: 1
+                fk_pac_codigo: 2
+                fk_med_codigo: 1
+                fk_nr_contrato: 4
+                fk_proc_codigo: 1
+
+      responses:
+        "201":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Código: 1
+                  Médico: "Paulo Dener"
+                  Paciente: "Ewellin Victtoria"
+                  Plano: "UNIMED RECIFE"
+                  Nº Contrato: 4
+                  Data: "2022-05-09"
+                  Hora: "09:00:00"
+                  Procedimento: "Consulta Odontologica"
+                  Particular: "Sim"
+        "200":
+          description: "erro operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Paciente, medico, Contrato ou procedimento não existem"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+  /api/consulta{cons_codigo}:
+    get:
+      tags:
+        - "Consulta"
+      summary: "Retorna uma Consulta específica"
+      description: ""
+      operationId: "ConsultaCodigo"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "cons_codigo"
+          in: "path"
+          description: "Código da Consulta"
+          required: true
+          type: "int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  Código: 1
+                  Médico: "Paulo Dener"
+                  Paciente: "Ewellin Victtoria"
+                  Plano: "UNIMED RECIFE"
+                  Nº Contrato: 4
+                  Data: "2022-05-09"
+                  Hora: "09:00:00"
+                  Procedimento: "Consulta Odontologica"
+                  Particular: "Sim"
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    put:
+      tags:
+        - "Consulta"
+      summary: "Editar uma consulta"
+      description: ""
+      operationId: "editConsulta"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "data"
+          in: "formdata"
+          description: "Data da consulta"
+          required: true
+          type: "Date"
+        - name: "hora"
+          in: "formdata"
+          description: "Hora da Consulta"
+          required: true
+          type: "time"
+        - name: "particular"
+          in: "formdata"
+          description: "Indica se a consulta é particular ou não"
+          required: true
+          type: "Int"
+        - name: "fk_pac_codigo"
+          in: "formdata"
+          description: "Código do Paciente"
+          required: true
+          type: "Int"
+        - name: "fk_med_codigo"
+          in: "formdata"
+          description: "Código do Médico"
+          required: true
+          type: "Int"
+        - name: "fk_nr_contrato"
+          in: "formdata"
+          description: "Código do Vinculo"
+          required: true
+          type: "Int"
+        - name: "fk_proc_codigo"
+          in: "formdata"
+          description: "Código do Procedimento"
+          required: true
+          type: "Int"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                data:
+                  type: Date
+                hora:
+                  type: Time
+                particular:
+                  type: Int
+                fk_pac_codigo:
+                  type: Int
+                fk_med_codigo:
+                  type: Int
+                fk_nr_contrato:
+                  type: Int
+                fk_proc_codigo:
+                  type: Int
+              example: # Sample object
+                data: "2022-05-09"
+                hora: "09:00:00"
+                particular: 1
+                fk_pac_codigo: 2
+                fk_med_codigo: 1
+                fk_nr_contrato: 4
+                fk_proc_codigo: 1
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Editado com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
+    delete:
+      tags:
+        - "Consulta"
+      summary: "Deletar uma Consulta"
+      description: ""
+      operationId: "deleteConsulta"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - name: "cons_codigo"
+          in: "path"
+          description: "Código da Consulta"
+          required: true
+          type: "Int"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Removido com Sucesso."
+        "401":
+          description: "You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`"
